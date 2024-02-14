@@ -1,16 +1,14 @@
 package main
 
-import (
-	"fmt"
-	"net/http"
-
-	"github.com/gorilla/mux"
-)
-
 func main() {
-	fmt.Println("hello go")
+	// db before server
+	dbUrl := "postgres://postgres:postgres@localhost:5435/restgolang"
+	db, err := getDB(dbUrl)
+	if err != nil {
+		panic("Failed to connect to the db")
+	}
 
-	router := mux.NewRouter()
-
-	http.ListenAndServe(":3000", router)
+	addr := ":3000"
+	s := NewAPIServer(addr, db)
+	s.Run()
 }
